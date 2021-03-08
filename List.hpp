@@ -145,7 +145,7 @@ namespace cmpt_info
         /**
          * @brief  Dereferencement
          */
-        ValueType &operator->() const;
+        ValueType *operator->() const;
         /**
          * @brief  Dereferencement
          */
@@ -322,11 +322,11 @@ namespace cmpt_info
     void List<ValueType>::clear()
     {
         //mmmmmh
-        auto it = _first;
+        node_t* it = _first;
         while (it != nullptr)
         {
-            auto next = it->_next;
-            remove(it);
+            node_t* next = it->_next;
+            free(it);
             it = next;
         }
     }
@@ -419,16 +419,16 @@ namespace cmpt_info
         return _ptr->_item;
     }
     template <typename ValueType>
-    ValueType &Iterator<ValueType>::operator->() const
+    ValueType *Iterator<ValueType>::operator->() const
     {
         //dereferencement
-        return _ptr->_item;
+        return &_ptr->_item;
     }
     template <typename ValueType>
     ValueType &Iterator<ValueType>::operator*() const
     {
         //dereferencement
-        return operator->();
+        return _ptr->_item;
     }
     template <typename ValueType>
     Iterator<ValueType> &Iterator<ValueType>::operator++()
