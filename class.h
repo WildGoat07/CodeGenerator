@@ -17,7 +17,8 @@ struct Class
     cmpt_info::List<std::string> templateTypes;
     cmpt_info::List<Attribute> attributes;
     cmpt_info::List<Method> methods;
-    cmpt_info::List<std::tuple<Range, Class*> > parents;
+    cmpt_info::List<std::tuple<Range, std::string, bool, cmpt_info::List<Type> > > parents;
+    bool finalClass;
 };
 
 #endif // CLASS_H

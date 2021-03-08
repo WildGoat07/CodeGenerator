@@ -2,7 +2,9 @@
 
 Attribute::Attribute():
     range(PRIVATE),
-    variable()
+    variable(),
+    staticAttribute(false),
+    transientAttribute(false)
 {
 
 }

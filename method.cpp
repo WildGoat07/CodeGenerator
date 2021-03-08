@@ -7,9 +7,9 @@ Method::Method():
     returnType(true),
     parameters(),
     modifier(NONE),
-    staticMethod(false),
     constantMethod(false),
-    specialMethod(BASIC)
+    specialMethod(BASIC),
+    finalMethod(false)
 {
 
 }

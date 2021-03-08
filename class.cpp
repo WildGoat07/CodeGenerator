@@ -8,6 +8,7 @@ Class::Class() :
     abstract(false),
     templateTypes(),
     attributes(),
-    parents()
+    parents(),
+    finalClass(false)
 {
 }

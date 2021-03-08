@@ -32,8 +32,8 @@ public:
     Type returnType;
     cmpt_info::List<Variable> parameters;
     Modifier modifier;
-    bool staticMethod;
     bool constantMethod;
+    bool finalMethod;
     Special specialMethod;
 };
 
