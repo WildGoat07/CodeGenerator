@@ -39,6 +39,12 @@ set(PROJECT_SOURCES
         variableMode.h
         range.h
         List.hpp
+        method.cpp
+        method.h
+        type.cpp
+        type.h
+        attribute.cpp
+        attribute.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

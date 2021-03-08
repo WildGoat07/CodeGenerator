@@ -1,7 +1,7 @@
 #ifndef VARIABLE_H
 #define VARIABLE_H
 #include <string>
-#include "VariableMode.h"
+#include "type.h"
 
 
 struct Variable
@@ -9,9 +9,7 @@ struct Variable
 public:
     Variable();
     std::string name;
-    bool constant;
-    std::string type;
-    VariableMode mode;
+    Type varType;
 };
 
 #endif // VARIABLE_H

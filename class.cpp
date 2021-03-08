@@ -3,6 +3,11 @@
 using namespace std;
 
 Class::Class() :
-    templateTypes()
+    name(),
+    interface(false),
+    abstract(false),
+    templateTypes(),
+    attributes(),
+    parents()
 {
 }

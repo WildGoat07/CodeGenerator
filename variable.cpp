@@ -1,6 +1,8 @@
 #include "variable.h"
 
-Variable::Variable()
+Variable::Variable():
+    name(),
+    varType(false)
 {
 
 }
