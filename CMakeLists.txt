@@ -45,6 +45,8 @@ set(PROJECT_SOURCES
         type.h
         attribute.cpp
         attribute.h
+        generator.cpp
+        generator.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

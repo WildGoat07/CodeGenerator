@@ -6,7 +6,10 @@ Method::Method():
     range(PUBLIC),
     returnType(true),
     parameters(),
-    modifier(NONE)
+    modifier(NONE),
+    staticMethod(false),
+    constantMethod(false),
+    specialMethod(BASIC)
 {
 
 }

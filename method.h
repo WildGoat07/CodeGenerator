@@ -15,8 +15,16 @@ public:
         NONE,
         VIRTUAL,
         OVERRIDE,
-        ABSTRACT
+        ABSTRACT,
+        STATIC
     };
+    enum Special
+    {
+        CONSTRUCTOR,
+        DESTRUCTOR,
+        BASIC
+    };
+
     Method();
     std::string name;
     cmpt_info::List<std::string> templateTypes;
@@ -24,6 +32,9 @@ public:
     Type returnType;
     cmpt_info::List<Variable> parameters;
     Modifier modifier;
+    bool staticMethod;
+    bool constantMethod;
+    Special specialMethod;
 };
 
 #endif // METHOD_H

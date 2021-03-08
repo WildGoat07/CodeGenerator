@@ -23,6 +23,7 @@ namespace cmpt_info
         template <typename NodeValueType>
         struct ListNode
         {
+            ListNode() {}
             NodeValueType _item;
             ListNode<NodeValueType> *_previous;
             ListNode<NodeValueType> *_next;
