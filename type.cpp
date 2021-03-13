@@ -1,6 +1,7 @@
 #include "type.h"
 
 Type::Type():
+    QListWidgetItem(),
     name(),
     templateValues(),
     constant(false),
@@ -15,4 +16,11 @@ Type::Type(bool Void):
     mode(COPY)
 {
 
+}
+QVariant Type::data(int role) const
+{
+    if (role == Qt::DisplayRole)
+        return QVariant(name);
+    else
+        return QListWidgetItem::data(role);
 }

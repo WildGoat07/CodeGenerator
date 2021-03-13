@@ -71,25 +71,6 @@
      <string>Supprimer classe</string>
     </property>
    </widget>
-   <widget class="QListView" name="classesView">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>631</width>
-      <height>541</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-   </widget>
    <widget class="QPushButton" name="generateJava">
     <property name="geometry">
      <rect>
@@ -114,6 +95,16 @@
     </property>
     <property name="text">
      <string>Voir C++</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="classesView">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>631</width>
+      <height>541</height>
+     </rect>
     </property>
    </widget>
   </widget>

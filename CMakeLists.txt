@@ -53,6 +53,8 @@ set(PROJECT_SOURCES
         newclass.h
         newclass.ui
         res.qrc
+        templatename.cpp
+        templatename.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

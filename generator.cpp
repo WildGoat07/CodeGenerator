@@ -42,7 +42,7 @@ void writeCppType(const Type& type, ostream& stream, bool addSpace)
     if (type.name == "boolean")
         stream << "bool";
     else
-        stream << type.name;
+        stream << type.name.toStdString();
     if (type.array)
         stream << '>';
     if (!type.templateValues.empty())
@@ -80,7 +80,7 @@ void writeCppAttribute(const Attribute& attribute, ostream &stream)
     if (attribute.staticAttribute)
         stream << "static ";
     writeCppType(attribute.variable.varType, stream, true);
-    stream << ' ' << attribute.variable.name << ';' << endl;
+    stream << ' ' << attribute.variable.name.toStdString() << ';' << endl;
 }
 
 void writeCppMethod(const Method& method, const string& className, ostream& stream)
@@ -98,7 +98,7 @@ void writeCppMethod(const Method& method, const string& className, ostream& stre
                     first = false;
                 else
                     stream << ", ";
-                stream << "typename " << *templ;
+                stream << "typename " << templ->name.toStdString();
             }
             stream << '>' << endl;
         }
@@ -117,7 +117,7 @@ void writeCppMethod(const Method& method, const string& className, ostream& stre
             break;
         }
         writeCppType(method.returnType, stream, true);
-        stream << method.name << '(';
+        stream << method.name.toStdString() << '(';
     }
     else
     {
@@ -134,7 +134,7 @@ void writeCppMethod(const Method& method, const string& className, ostream& stre
         else
             stream << ", ";
         writeCppType(paramIt->varType, stream, true);
-        stream << paramIt->name;
+        stream << paramIt->name.toStdString();
     }
     stream << ')';
     if (method.constantMethod)
@@ -160,11 +160,11 @@ void writeCppClass(const Class& c, ostream &stream)
                 first = false;
             else
                 stream << ", ";
-            stream << "typename " << *templ;
+            stream << "typename " << templ->name.toStdString();
         }
         stream << '>' << endl;
     }
-    stream << "class " << c.name;
+    stream << "class " << c.name.toStdString();
     if (c.finalClass)
         stream << " final";
     if (!c.parents.empty())
@@ -177,12 +177,12 @@ void writeCppClass(const Class& c, ostream &stream)
                 first = false;
             else
                 stream << ", ";
-            string parent;
+            QString parent;
             Range range;
             bool interface;
             List<Type> templateTypes;
             tie(range, parent, interface, templateTypes) = *parentIt;
-            stream << getRange(range) << ' ' << parent;
+            stream << getRange(range) << ' ' << parent.toStdString();
             if (!templateTypes.empty())
             {
                 stream << "<";
@@ -257,21 +257,21 @@ void writeCppClass(const Class& c, ostream &stream)
         stream << endl;
         stream << "public: // public methods" << endl;
         for (auto methodIt = publicMethods.begin();methodIt != publicMethods.end();++methodIt)
-            writeCppMethod(**methodIt, c.name, stream);
+            writeCppMethod(**methodIt, c.name.toStdString(), stream);
     }
     if (!protectedMethods.empty())
     {
         stream << endl;
         stream << "protected: // protected methods" << endl;
         for (auto methodIt = protectedMethods.begin();methodIt != protectedMethods.end();++methodIt)
-            writeCppMethod(**methodIt, c.name, stream);
+            writeCppMethod(**methodIt, c.name.toStdString(), stream);
     }
     if (!privateMethods.empty())
     {
         stream << endl;
         stream << "private: // private methods" << endl;
         for (auto methodIt = privateMethods.begin();methodIt != privateMethods.end();++methodIt)
-            writeCppMethod(**methodIt, c.name, stream);
+            writeCppMethod(**methodIt, c.name.toStdString(), stream);
     }
 
     stream << "};" << endl;
@@ -280,7 +280,7 @@ void writeCppClass(const Class& c, ostream &stream)
 void Generator::GenerateCpp(ostream &stream)
 {
     for (auto it = classes.begin();it != classes.end();++it)
-        stream << "class " << it->name << ';' << endl;
+        stream << "class " << it->name.toStdString() << ';' << endl;
     for (auto it = classes.begin();it != classes.end();++it)
     {
         stream << endl;
@@ -292,7 +292,7 @@ void writeJavaType(const Type& type, ostream &stream)
 {
     if (type.array)
         stream << "List<";
-    stream << type.name;
+    stream << type.name.toStdString();
     if (type.array)
         stream << '>';
     if (!type.templateValues.empty())
@@ -322,7 +322,7 @@ void writeJavaAttribute(const Attribute& attribute, ostream &stream)
     if (attribute.transientAttribute)
         stream << "transient ";
     writeJavaType(attribute.variable.varType, stream);
-    stream << ' ' << attribute.variable.name << ';' << endl;
+    stream << ' ' << attribute.variable.name.toStdString() << ';' << endl;
 }
 
 void writeJavaMethod(const Method& method, bool interface, const string& className, ostream &stream)
@@ -355,12 +355,12 @@ void writeJavaMethod(const Method& method, bool interface, const string& classNa
                     first = false;
                 else
                     stream << ", ";
-                stream << *templ;
+                stream << templ->name.toStdString();
             }
             stream << "> ";
         }
         writeJavaType(method.returnType, stream);
-        stream << ' ' << method.name << '(';
+        stream << ' ' << method.name.toStdString() << '(';
     }
     else if (method.specialMethod == Method::CONSTRUCTOR && !interface)
     {
@@ -379,7 +379,7 @@ void writeJavaMethod(const Method& method, bool interface, const string& classNa
             if (paramIt->varType.constant)
                 stream << "final ";
             writeJavaType(paramIt->varType, stream);
-            stream << ' ' << paramIt->name;
+            stream << ' ' << paramIt->name.toStdString();
         }
         stream << ')';
         if (method.modifier == Method::ABSTRACT || interface)
@@ -417,7 +417,7 @@ void writeJavaClass(const Class& c, ostream &stream)
 {
     if (c.finalClass)
         stream << "final ";
-    stream << (c.interface ? "interface " : "class ") << c.name;
+    stream << (c.interface ? "interface " : "class ") << c.name.toStdString();
     if (!c.templateTypes.empty())
     {
         stream << "<";
@@ -428,7 +428,7 @@ void writeJavaClass(const Class& c, ostream &stream)
                 first = false;
             else
                 stream << ", ";
-            stream << *templ;
+            stream << templ->name.toStdString();
         }
         stream << '>';
     }
@@ -437,7 +437,7 @@ void writeJavaClass(const Class& c, ostream &stream)
         {
             if (!get<2>(*parentIt))
             {
-                stream << " extends " << get<1>(*parentIt);
+                stream << " extends " << get<1>(*parentIt).toStdString();
                 auto templateTypes = get<3>(*parentIt);
                 if (!templateTypes.empty())
                 {
@@ -459,7 +459,7 @@ void writeJavaClass(const Class& c, ostream &stream)
     List<tuple<string, List<Type> > > interfaces;
     for (auto parentIt = c.parents.begin();parentIt != c.parents.end();++parentIt)
         if (get<2>(*parentIt))
-            interfaces.push_back(make_tuple(get<1>(*parentIt), get<3>(*parentIt)));
+            interfaces.push_back(make_tuple(get<1>(*parentIt).toStdString(), get<3>(*parentIt)));
     if (!interfaces.empty())
     {
         stream << (c.interface ? " extends " : " implements ");
@@ -553,7 +553,7 @@ void writeJavaClass(const Class& c, ostream &stream)
         indent(1, stream);
         stream << "// public methods" << endl;
         for (auto methodIt = publicMethods.begin();methodIt != publicMethods.end();++methodIt)
-            writeJavaMethod(**methodIt, c.interface, c.name, stream);
+            writeJavaMethod(**methodIt, c.interface, c.name.toStdString(), stream);
     }
     if (!protectedMethods.empty())
     {
@@ -561,7 +561,7 @@ void writeJavaClass(const Class& c, ostream &stream)
         indent(1, stream);
         stream << "// protected methods" << endl;
         for (auto methodIt = protectedMethods.begin();methodIt != protectedMethods.end();++methodIt)
-            writeJavaMethod(**methodIt, c.interface, c.name, stream);
+            writeJavaMethod(**methodIt, c.interface, c.name.toStdString(), stream);
     }
     if (!privateMethods.empty())
     {
@@ -569,7 +569,7 @@ void writeJavaClass(const Class& c, ostream &stream)
         indent(1, stream);
         stream << "// private methods" << endl;
         for (auto methodIt = privateMethods.begin();methodIt != privateMethods.end();++methodIt)
-            writeJavaMethod(**methodIt, c.interface, c.name, stream);
+            writeJavaMethod(**methodIt, c.interface, c.name.toStdString(), stream);
     }
 
     stream << '}' << endl;

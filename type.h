@@ -3,8 +3,10 @@
 #include <QString>
 #include "variableMode.h"
 #include "List.hpp"
+#include <QListWidgetItem>
+#include <QVariant>
 
-struct Type
+struct Type : public QListWidgetItem
 {
 public:
     Type();
@@ -14,6 +16,7 @@ public:
     bool constant;
     VariableMode mode;
     bool array;
+    virtual QVariant data(int role) const override;
 };
 
 #endif // TYPE_H

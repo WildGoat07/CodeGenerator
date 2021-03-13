@@ -55,12 +55,12 @@ namespace cmpt_info
          * @brief  Adds a new item to the front
          * @param  item: value to push 
          */
-        void push_front(ValueType const &item);
+        ValueType& push_front(ValueType const &item);
         /**
          * @brief  Adds a new item to the back
          * @param  item: value to push
          */
-        void push_back(ValueType const &item);
+        ValueType& push_back(ValueType const &item);
         /**
          * @brief  Returns the size of the list
          * @return the size of the list 
@@ -76,12 +76,12 @@ namespace cmpt_info
          * @param  it: iterator to where to insert the item
          * @param  item: value to insert
          */
-        void insert(iterator &it, ValueType const &item);
+        ValueType& insert(iterator const &it, ValueType const &item);
         /**
          * @brief  Removes an item from the list
          * @param  it: iterator of the item to remove
          */
-        void remove(iterator &it);
+        ValueType remove(iterator const &it);
         /**
          * @brief  Removes the first item of the list
          */
@@ -203,7 +203,7 @@ namespace cmpt_info
         }
     }
     template <typename ValueType>
-    void List<ValueType>::push_front(ValueType const &item)
+    ValueType &List<ValueType>::push_front(ValueType const &item)
     {
         //we crate a new node dynamically and add it to the list
         node_t *node = new node_t();
@@ -216,9 +216,10 @@ namespace cmpt_info
             _last = node;
         _first = node;
         ++_size;
+        return node->_item;
     }
     template <typename ValueType>
-    void List<ValueType>::push_back(ValueType const &item)
+    ValueType &List<ValueType>::push_back(ValueType const &item)
     {
         //we crate a new node dynamically and add it to the list
         node_t *node = new node_t();
@@ -231,20 +232,21 @@ namespace cmpt_info
             _first = node;
         _last = node;
         ++_size;
+        return node->_item;
     }
     template <typename ValueType>
-    void List<ValueType>::insert(iterator &it, ValueType const &item)
+    ValueType &List<ValueType>::insert(iterator const &it, ValueType const &item)
     {
         if (it._list != this)
             throw std::invalid_argument("Iterator not pointing this list.");
         else if (it == end())
-            push_back(item);
+            return push_back(item);
         else if (it == begin())
-            push_front(item);
+            return push_front(item);
         else if (it == rend())
-            push_front(item);
+            return push_front(item);
         else if (it == rbegin())
-            push_back(item);
+            return push_back(item);
         else
         {
             if (it._reverse)
@@ -258,6 +260,7 @@ namespace cmpt_info
                 it._ptr->_next = node;
                 node->_previous = it._ptr;
                 ++_size;
+                return node->_item;
             }
             else
             {
@@ -269,11 +272,12 @@ namespace cmpt_info
                 it._ptr->_previous = node;
                 node->_next = it._ptr;
                 ++_size;
+                return node->_item;
             }
         }
     }
     template <typename ValueType>
-    void List<ValueType>::remove(iterator &it)
+    ValueType List<ValueType>::remove(iterator const &it)
     {
         //we remove a node
         if (it._list != this)
@@ -282,12 +286,14 @@ namespace cmpt_info
             _first = it._ptr->_next;
         if (_last == it._ptr)
             _last = it._ptr->_previous;
+        ValueType ret = it._ptr->_item;
         if (it._ptr->_previous != nullptr)
             it._ptr->_previous->_next = it._ptr->_next;
         if (it._ptr->_next != nullptr)
             it._ptr->_next->_previous = it._ptr->_previous;
         delete it._ptr; //don't forget
         --_size;
+        return ret;
     }
     template <typename ValueType>
     size_t List<ValueType>::size() const

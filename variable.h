@@ -2,14 +2,17 @@
 #define VARIABLE_H
 #include <QString>
 #include "type.h"
+#include <QListWidgetItem>
+#include <QVariant>
 
 
-struct Variable
+struct Variable : public QListWidgetItem
 {
 public:
     Variable();
     QString name;
-    Type varType;
+    struct Type varType;
+    virtual QVariant data(int role) const override;
 };
 
 #endif // VARIABLE_H

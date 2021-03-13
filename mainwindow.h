@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QListView>
 #include <QStringListModel>
+#include "class.h"
+#include "List.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,10 +22,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QStringListModel *classesViewModel;
 
 private slots:
-    void newClassSlot();
+    void newClassPressed();
+    void editClassPressed();
+    void deleteClassPressed();
     void classesViewSelectionChanged();
 };
 #endif // MAINWINDOW_H

@@ -6,8 +6,11 @@
 #include "type.h"
 #include "List.hpp"
 #include "variable.h"
+#include "templatename.h"
+#include <QListWidgetItem>
+#include <QVariant>
 
-struct Method
+struct Method : public QListWidgetItem
 {
 public:
     enum Modifier
@@ -27,14 +30,15 @@ public:
 
     Method();
     QString name;
-    cmpt_info::List<QString> templateTypes;
+    cmpt_info::List<TemplateName> templateTypes;
     Range range;
-    Type returnType;
+    struct Type returnType;
     cmpt_info::List<Variable> parameters;
     Modifier modifier;
     bool constantMethod;
     bool finalMethod;
     Special specialMethod;
+    virtual QVariant data(int role) const override;
 };
 
 #endif // METHOD_H

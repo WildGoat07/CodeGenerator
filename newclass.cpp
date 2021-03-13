@@ -23,9 +23,16 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
         ui->classType->setCurrentIndex(0);
     ui->finalClass->setChecked(generatedClass.finalClass);
 
+    for (auto it = generatedClass.templateTypes.begin();it != generatedClass.templateTypes.end();++it)
+        ui->classTemplates->addItem(&*it);
+
     connect(ui->finalClass, &QCheckBox::released, this, &NewClass::finalChanged);
     connect(ui->classType, &QComboBox::currentIndexChanged, this, &NewClass::typeChanged);
     connect(ui->className, &QLineEdit::textChanged, this, &NewClass::nameChanged);
+    connect(ui->validate, &QPushButton::pressed, this, &QDialog::accept);
+    connect(ui->cancel, &QPushButton::pressed, this, &QDialog::reject);
+
+    ui->className->selectAll();
 }
 
 NewClass::~NewClass()
