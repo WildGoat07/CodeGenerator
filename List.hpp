@@ -55,12 +55,12 @@ namespace cmpt_info
          * @brief  Adds a new item to the front
          * @param  item: value to push 
          */
-        ValueType& push_front(ValueType const &item);
+        iterator push_front(ValueType const &item);
         /**
          * @brief  Adds a new item to the back
          * @param  item: value to push
          */
-        ValueType& push_back(ValueType const &item);
+        iterator push_back(ValueType const &item);
         /**
          * @brief  Returns the size of the list
          * @return the size of the list 
@@ -76,7 +76,7 @@ namespace cmpt_info
          * @param  it: iterator to where to insert the item
          * @param  item: value to insert
          */
-        ValueType& insert(iterator const &it, ValueType const &item);
+        iterator insert(iterator const &it, ValueType const &item);
         /**
          * @brief  Removes an item from the list
          * @param  it: iterator of the item to remove
@@ -114,6 +114,7 @@ namespace cmpt_info
          * @return a reverse iterator that points to the end of the list
          */
         iterator rend() const;
+        iterator find(ValueType const* value) const;
         /**
          * @brief  list = list
          */
@@ -128,15 +129,15 @@ namespace cmpt_info
         friend List<ValueType>;
 
     protected:
-        typename List<ValueType>::node_t *_ptr;
-        typename List<ValueType>::node_t *_next;
-        typename List<ValueType>::node_t *_prev;
+        mutable typename List<ValueType>::node_t *_ptr;
+        mutable typename List<ValueType>::node_t *_next;
+        mutable typename List<ValueType>::node_t *_prev;
         const List<ValueType> *_list;
         bool _reverse;
 
         Iterator(const List<ValueType> *list, typename List<ValueType>::node_t *ptr, bool reverse);
 
-        void refresh();
+        void refresh() const;
 
     public:
         /**
@@ -203,7 +204,7 @@ namespace cmpt_info
         }
     }
     template <typename ValueType>
-    ValueType &List<ValueType>::push_front(ValueType const &item)
+    typename List<ValueType>::iterator List<ValueType>::push_front(ValueType const &item)
     {
         //we crate a new node dynamically and add it to the list
         node_t *node = new node_t();
@@ -216,10 +217,10 @@ namespace cmpt_info
             _last = node;
         _first = node;
         ++_size;
-        return node->_item;
+        return iterator(this, node, false);
     }
     template <typename ValueType>
-    ValueType &List<ValueType>::push_back(ValueType const &item)
+    typename List<ValueType>::iterator List<ValueType>::push_back(ValueType const &item)
     {
         //we crate a new node dynamically and add it to the list
         node_t *node = new node_t();
@@ -232,10 +233,10 @@ namespace cmpt_info
             _first = node;
         _last = node;
         ++_size;
-        return node->_item;
+        return iterator(this, node, false);
     }
     template <typename ValueType>
-    ValueType &List<ValueType>::insert(iterator const &it, ValueType const &item)
+    typename List<ValueType>::iterator List<ValueType>::insert(iterator const &it, ValueType const &item)
     {
         if (it._list != this)
             throw std::invalid_argument("Iterator not pointing this list.");
@@ -256,11 +257,11 @@ namespace cmpt_info
                 node->_item = item;
                 if (it._ptr->_next != nullptr)
                     it._ptr->_next->_previous = node;
-                node->_next = it.ptr->_next;
+                node->_next = it._ptr->_next;
                 it._ptr->_next = node;
                 node->_previous = it._ptr;
                 ++_size;
-                return node->_item;
+                return iterator(this, node, false);
             }
             else
             {
@@ -268,11 +269,11 @@ namespace cmpt_info
                 node->_item = item;
                 if (it._ptr->_previous != nullptr)
                     it._ptr->_previous->_next = node;
-                node->_previous = it.ptr->_previous;
+                node->_previous = it._ptr->_previous;
                 it._ptr->_previous = node;
                 node->_next = it._ptr;
                 ++_size;
-                return node->_item;
+                return iterator(this, node, false);
             }
         }
     }
@@ -282,15 +283,16 @@ namespace cmpt_info
         //we remove a node
         if (it._list != this)
             throw std::invalid_argument("Iterator not pointing this list.");
-        if (_first == it._ptr)
-            _first = it._ptr->_next;
-        if (_last == it._ptr)
-            _last = it._ptr->_previous;
-        ValueType ret = it._ptr->_item;
+        iterator cpy = it;
+        if (_first == cpy._ptr)
+            _first = cpy._ptr->_next;
+        if (_last == cpy._ptr)
+            _last = cpy._ptr->_previous;
+        ValueType ret = cpy._ptr->_item;
         if (it._ptr->_previous != nullptr)
-            it._ptr->_previous->_next = it._ptr->_next;
+            it._ptr->_previous->_next = cpy._ptr->_next;
         if (it._ptr->_next != nullptr)
-            it._ptr->_next->_previous = it._ptr->_previous;
+            it._ptr->_next->_previous = cpy._ptr->_previous;
         delete it._ptr; //don't forget
         --_size;
         return ret;
@@ -362,6 +364,17 @@ namespace cmpt_info
         return iterator(this, nullptr, true);
     }
     template <typename ValueType>
+    typename List<ValueType>::iterator List<ValueType>::find(ValueType const* value) const
+    {
+        if (!value)
+            return end();
+        for (auto it = begin();it != end();++it)
+            if (&*it == value)
+                return it;
+        return end();
+    }
+
+    template <typename ValueType>
     List<ValueType> &List<ValueType>::operator=(const List<ValueType> &right)
     {
         clear();
@@ -397,7 +410,7 @@ namespace cmpt_info
         refresh();
     }
     template <typename ValueType>
-    void Iterator<ValueType>::refresh()
+    void Iterator<ValueType>::refresh() const
     {
         //we refresh the values of the next and previous values of the iterator
         if (_ptr != nullptr)

@@ -1,5 +1,6 @@
 #include "newclass.h"
 #include "ui_newclass.h"
+#include "newtemplatename.h"
 
 NewClass::NewClass(QWidget *parent, Class const* ref) :
     QDialog(parent),
@@ -26,11 +27,15 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     for (auto it = generatedClass.templateTypes.begin();it != generatedClass.templateTypes.end();++it)
         ui->classTemplates->addItem(&*it);
 
-    connect(ui->finalClass, &QCheckBox::released, this, &NewClass::finalChanged);
+    connect(ui->finalClass, &QCheckBox::clicked, this, &NewClass::finalChanged);
     connect(ui->classType, &QComboBox::currentIndexChanged, this, &NewClass::typeChanged);
     connect(ui->className, &QLineEdit::textChanged, this, &NewClass::nameChanged);
-    connect(ui->validate, &QPushButton::pressed, this, &QDialog::accept);
-    connect(ui->cancel, &QPushButton::pressed, this, &QDialog::reject);
+    connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
+    connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
+    connect(ui->addTemplate, &QPushButton::clicked, this, &NewClass::addTemplatePressed);
+    connect(ui->classTemplates, &QListWidget::itemSelectionChanged, this, &NewClass::classTemplatesChanged);
+    connect(ui->upTemplate, &QPushButton::clicked, this, &NewClass::upTemplatePressed);
+    connect(ui->downTemplate, &QPushButton::clicked, this, &NewClass::downTemplatePressed);
 
     ui->className->selectAll();
 }
@@ -66,6 +71,69 @@ void NewClass::typeChanged()
         generatedClass.abstract = true;
         generatedClass.interface = false;
         break;
+    }
+}
+
+void NewClass::addTemplatePressed()
+{
+    NewTemplateType dialog(this);
+    if (dialog.exec())
+        ui->classTemplates->addItem(&*generatedClass.templateTypes.push_back(dialog.getResult()));
+}
+
+void NewClass::classTemplatesChanged()
+{
+    if (ui->classTemplates->currentRow() != -1)
+    {
+        ui->editTemplate->setEnabled(true);
+        ui->deleteTemplate->setEnabled(true);
+        ui->upTemplate->setEnabled(true);
+        ui->downTemplate->setEnabled(true);
+    }
+    else
+    {
+        ui->editTemplate->setEnabled(false);
+        ui->deleteTemplate->setEnabled(false);
+        ui->upTemplate->setEnabled(false);
+        ui->downTemplate->setEnabled(false);
+    }
+}
+
+#include <iostream>
+
+void NewClass::upTemplatePressed()
+{
+    if (ui->classTemplates->currentRow() > 0)
+    {
+        auto it = generatedClass.templateTypes.find(dynamic_cast<TemplateName*>(ui->classTemplates->currentItem()));
+        TemplateName moved = *it;
+        generatedClass.templateTypes.remove(it);
+        --it;
+        it = generatedClass.templateTypes.insert(it, moved);
+        while (ui->classTemplates->count())
+            ui->classTemplates->takeItem(0);
+        for (auto it2 = generatedClass.templateTypes.begin();it2 != generatedClass.templateTypes.end();++it2)
+            ui->classTemplates->addItem(&*it2);
+        ui->classTemplates->setCurrentItem(&*it);
+    }
+}
+
+void NewClass::downTemplatePressed()
+{
+    if (ui->classTemplates->currentRow() < ui->classTemplates->count()-1)
+    {
+        auto it = generatedClass.templateTypes.find(dynamic_cast<TemplateName*>(ui->classTemplates->currentItem()));
+        ++it;
+        TemplateName moved = *it;
+        generatedClass.templateTypes.remove(it);
+        --it;
+        it = generatedClass.templateTypes.insert(it, moved);
+        ++it;
+        while (ui->classTemplates->count())
+            ui->classTemplates->takeItem(0);
+        for (auto it2 = generatedClass.templateTypes.begin();it2 != generatedClass.templateTypes.end();++it2)
+            ui->classTemplates->addItem(&*it2);
+        ui->classTemplates->setCurrentItem(&*it);
     }
 }
 

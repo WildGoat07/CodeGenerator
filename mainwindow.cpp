@@ -17,9 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     setFixedSize(size());
 
 
-    connect(ui->newClass, &QPushButton::released, this, &MainWindow::newClassPressed);
+    connect(ui->newClass, &QPushButton::clicked, this, &MainWindow::newClassPressed);
     connect(ui->classesView, &QListWidget::itemSelectionChanged, this, &MainWindow::classesViewSelectionChanged);
-    connect(ui->deleteClass, &QPushButton::released, this, &MainWindow::deleteClassPressed);
+    connect(ui->deleteClass, &QPushButton::clicked, this, &MainWindow::deleteClassPressed);
     connect(ui->editClass, &QPushButton::released, this, &MainWindow::editClassPressed);
 
 }
@@ -45,9 +45,8 @@ void MainWindow::editClassPressed()
 
 void MainWindow::deleteClassPressed()
 {
-    auto ptr = ui->classesView->currentItem();
-    ui->classesView->removeItemWidget(ptr);
-    delete ptr;
+    delete ui->classesView->takeItem(ui->classesView->currentRow());
+    ui->classesView->setCurrentRow(-1);
 }
 
 void MainWindow::classesViewSelectionChanged()

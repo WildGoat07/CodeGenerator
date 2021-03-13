@@ -20,6 +20,10 @@ private slots:
     void finalChanged();
     void typeChanged();
     void nameChanged();
+    void addTemplatePressed();
+    void classTemplatesChanged();
+    void upTemplatePressed();
+    void downTemplatePressed();
 
 private:
     Ui::NewClass *ui;
