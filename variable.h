@@ -1,6 +1,6 @@
 #ifndef VARIABLE_H
 #define VARIABLE_H
-#include <string>
+#include <QString>
 #include "type.h"
 
 
@@ -8,7 +8,7 @@ struct Variable
 {
 public:
     Variable();
-    std::string name;
+    QString name;
     Type varType;
 };
 

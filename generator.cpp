@@ -37,7 +37,14 @@ void writeCppType(const Type& type, ostream& stream, bool addSpace)
 {
     if (type.constant)
         stream << "const ";
-    stream << type.name;
+    if (type.array)
+        stream << "vector<";
+    if (type.name == "boolean")
+        stream << "bool";
+    else
+        stream << type.name;
+    if (type.array)
+        stream << '>';
     if (!type.templateValues.empty())
     {
         stream << "<";
@@ -283,7 +290,11 @@ void Generator::GenerateCpp(ostream &stream)
 
 void writeJavaType(const Type& type, ostream &stream)
 {
+    if (type.array)
+        stream << "List<";
     stream << type.name;
+    if (type.array)
+        stream << '>';
     if (!type.templateValues.empty())
     {
         stream << "<";

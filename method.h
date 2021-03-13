@@ -1,6 +1,6 @@
 #ifndef METHOD_H
 #define METHOD_H
-#include <string>
+#include <QString>
 #include <tuple>
 #include "range.h"
 #include "type.h"
@@ -26,8 +26,8 @@ public:
     };
 
     Method();
-    std::string name;
-    cmpt_info::List<std::string> templateTypes;
+    QString name;
+    cmpt_info::List<QString> templateTypes;
     Range range;
     Type returnType;
     cmpt_info::List<Variable> parameters;

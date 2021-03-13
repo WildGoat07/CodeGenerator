@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
+#include <QListView>
+#include <QStringListModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,5 +20,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QStringListModel *classesViewModel;
+
+private slots:
+    void newClassSlot();
+    void classesViewSelectionChanged();
 };
 #endif // MAINWINDOW_H

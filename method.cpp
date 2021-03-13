@@ -8,8 +8,8 @@ Method::Method():
     parameters(),
     modifier(NONE),
     constantMethod(false),
-    specialMethod(BASIC),
-    finalMethod(false)
+    finalMethod(false),
+    specialMethod(BASIC)
 {
 
 }

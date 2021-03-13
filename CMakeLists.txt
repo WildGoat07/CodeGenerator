@@ -49,6 +49,10 @@ set(PROJECT_SOURCES
         generator.h
         Stack.hpp
         Queue.hpp
+        newclass.cpp
+        newclass.h
+        newclass.ui
+        res.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
