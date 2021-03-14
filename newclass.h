@@ -15,7 +15,7 @@ class NewClass : public QDialog
 public:
     explicit NewClass(QWidget *parent = nullptr, Class const* ref = nullptr);
     ~NewClass();
-    Class getResult();
+    Class const &getResult();
 private slots:
     void finalChanged();
     void typeChanged();
@@ -24,6 +24,8 @@ private slots:
     void classTemplatesChanged();
     void upTemplatePressed();
     void downTemplatePressed();
+    void editTemplatePressed();
+    void deleteTemplatePressed();
 
 private:
     Ui::NewClass *ui;

@@ -1,6 +1,7 @@
 #include "newclass.h"
 #include "ui_newclass.h"
 #include "newtemplatename.h"
+#include "utilities.h"
 
 NewClass::NewClass(QWidget *parent, Class const* ref) :
     QDialog(parent),
@@ -36,6 +37,8 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     connect(ui->classTemplates, &QListWidget::itemSelectionChanged, this, &NewClass::classTemplatesChanged);
     connect(ui->upTemplate, &QPushButton::clicked, this, &NewClass::upTemplatePressed);
     connect(ui->downTemplate, &QPushButton::clicked, this, &NewClass::downTemplatePressed);
+    connect(ui->editTemplate, &QPushButton::clicked, this, &NewClass::editTemplatePressed);
+    connect(ui->deleteTemplate, &QPushButton::clicked, this, &NewClass::deleteTemplatePressed);
 
     ui->className->selectAll();
 }
@@ -81,6 +84,24 @@ void NewClass::addTemplatePressed()
         ui->classTemplates->addItem(&*generatedClass.templateTypes.push_back(dialog.getResult()));
 }
 
+void NewClass::editTemplatePressed()
+{
+    auto currentTemplate = dynamic_cast<TemplateName*>(ui->classTemplates->currentItem());
+    NewTemplateType dialog(this, currentTemplate);
+    if (dialog.exec())
+    {
+        *currentTemplate = dialog.getResult();
+    }
+}
+
+void NewClass::deleteTemplatePressed()
+{
+    generatedClass.templateTypes.remove(
+                generatedClass.templateTypes.find(
+                    dynamic_cast<TemplateName*>(ui->classTemplates->takeItem(ui->classTemplates->currentRow()))));
+    ui->classTemplates->setCurrentRow(-1);
+}
+
 void NewClass::classTemplatesChanged()
 {
     if (ui->classTemplates->currentRow() != -1)
@@ -98,8 +119,6 @@ void NewClass::classTemplatesChanged()
         ui->downTemplate->setEnabled(false);
     }
 }
-
-#include <iostream>
 
 void NewClass::upTemplatePressed()
 {
@@ -137,7 +156,9 @@ void NewClass::downTemplatePressed()
     }
 }
 
-Class NewClass::getResult()
+#include <iostream>
+
+Class const &NewClass::getResult()
 {
     return generatedClass;
 }

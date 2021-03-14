@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "newclass.h"
-#include <iostream>
-
-#include <QMessageBox>
 
 
 using namespace std;
@@ -32,6 +29,9 @@ void MainWindow::newClassPressed()
         ui->classesView->addItem(new Class(dialog.getResult()));
     }
 }
+
+#include <iostream>
+
 
 void MainWindow::editClassPressed()
 {

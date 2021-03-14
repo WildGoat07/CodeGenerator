@@ -57,6 +57,8 @@ set(PROJECT_SOURCES
         newtemplatename.cpp
         newtemplatename.h
         newtemplatename.ui
+        utilities.cpp
+        utilities.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

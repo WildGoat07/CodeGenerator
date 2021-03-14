@@ -15,7 +15,7 @@ class NewTemplateType : public QDialog
 public:
     explicit NewTemplateType(QWidget *parent = nullptr, TemplateName const* ref = nullptr);
     ~NewTemplateType();
-    TemplateName getResult();
+    TemplateName const &getResult();
 
 private slots:
     void nameChanged();

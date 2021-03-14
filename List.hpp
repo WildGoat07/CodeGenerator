@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <ostream>
+#include "utilities.h"
 
 namespace cmpt_info
 {
@@ -332,12 +333,14 @@ namespace cmpt_info
     {
         //mmmmmh
         node_t* it = _first;
-        while (it != nullptr)
+        while(it != nullptr)
         {
             node_t* next = it->_next;
-            free(it);
+            delete it;
             it = next;
         }
+        _first = nullptr;
+        _last = nullptr;
     }
     template <typename ValueType>
     typename List<ValueType>::iterator List<ValueType>::begin() const
