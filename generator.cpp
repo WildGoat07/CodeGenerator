@@ -27,6 +27,8 @@ void writeCppType(const Type& type, ostream& stream, bool addSpace)
         stream << "vector<";
     if (type.name == "boolean")
         stream << "bool";
+    else if (type.name == "String" || type.name == "string")
+        stream << "std::string";
     else
         stream << type.name.toStdString();
     if (type.array)
@@ -273,7 +275,12 @@ void writeJavaType(const Type& type, ostream &stream)
 {
     if (type.array)
         stream << "List<";
-    stream << type.name.toStdString();
+    if (type.name == "bool")
+        stream << "boolean";
+    else if (type.name == "string" || type.name == "std::string")
+        stream << "String";
+    else
+        stream << type.name.toStdString();
     if (type.array)
         stream << '>';
     if (!type.templateValues.empty())

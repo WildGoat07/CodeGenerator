@@ -27,11 +27,17 @@ private slots:
     void editTemplatePressed();
     void deleteTemplatePressed();
     void addParentPressed();
-    void classParentChanged();
+    void classParentsChanged();
     void upParentPressed();
     void downParentPressed();
     void editParentPressed();
     void deleteParentPressed();
+    void addAttributePressed();
+    void classAttributeChanged();
+    void upAttributePressed();
+    void downAttributePressed();
+    void editAttributePressed();
+    void deleteAttributePressed();
 
 private:
     Ui::NewClass *ui;

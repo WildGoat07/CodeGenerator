@@ -47,17 +47,17 @@
    </property>
    <item>
     <property name="text">
-     <string>public</string>
+     <string>Publique</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>protégé</string>
+     <string>Protégé</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>privé</string>
+     <string>Privé</string>
     </property>
    </item>
   </widget>

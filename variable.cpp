@@ -3,7 +3,7 @@
 Variable::Variable():
     QListWidgetItem(),
     name(),
-    varType(false)
+    varType("int")
 {
 
 }

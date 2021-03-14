@@ -5,7 +5,7 @@ Method::Method():
     name(),
     templateTypes(),
     range(PUBLIC),
-    returnType(true),
+    returnType("void"),
     parameters(),
     modifier(NONE),
     constantMethod(false),

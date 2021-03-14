@@ -2,6 +2,8 @@
 #include "ui_newclass.h"
 #include "newtemplatename.h"
 #include "newparent.h"
+#include "newattribute.h"
+
 #include "utilities.h"
 
 NewClass::NewClass(QWidget *parent, Class const* ref) :
@@ -32,23 +34,35 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     for (auto it = generatedClass.parents.begin();it != generatedClass.parents.end();++it)
         ui->classParents->addItem(&*it);
 
+    for (auto it = generatedClass.attributes.begin();it != generatedClass.attributes.end();++it)
+        ui->classAttributes->addItem(&*it);
+
     connect(ui->finalClass, &QCheckBox::clicked, this, &NewClass::finalChanged);
     connect(ui->classType, &QComboBox::currentIndexChanged, this, &NewClass::typeChanged);
     connect(ui->className, &QLineEdit::textChanged, this, &NewClass::nameChanged);
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
+
     connect(ui->addTemplate, &QPushButton::clicked, this, &NewClass::addTemplatePressed);
     connect(ui->classTemplates, &QListWidget::itemSelectionChanged, this, &NewClass::classTemplatesChanged);
     connect(ui->upTemplate, &QPushButton::clicked, this, &NewClass::upTemplatePressed);
     connect(ui->downTemplate, &QPushButton::clicked, this, &NewClass::downTemplatePressed);
     connect(ui->editTemplate, &QPushButton::clicked, this, &NewClass::editTemplatePressed);
     connect(ui->deleteTemplate, &QPushButton::clicked, this, &NewClass::deleteTemplatePressed);
+
     connect(ui->addParent, &QPushButton::clicked, this, &NewClass::addParentPressed);
-    connect(ui->classParents, &QListWidget::itemSelectionChanged, this, &NewClass::classParentChanged);
+    connect(ui->classParents, &QListWidget::itemSelectionChanged, this, &NewClass::classParentsChanged);
     connect(ui->upParent, &QPushButton::clicked, this, &NewClass::upParentPressed);
     connect(ui->downParent, &QPushButton::clicked, this, &NewClass::downParentPressed);
     connect(ui->editParent, &QPushButton::clicked, this, &NewClass::editParentPressed);
     connect(ui->deleteParent, &QPushButton::clicked, this, &NewClass::deleteParentPressed);
+
+    connect(ui->addAttribute, &QPushButton::clicked, this, &NewClass::addAttributePressed);
+    connect(ui->classAttributes, &QListWidget::itemSelectionChanged, this, &NewClass::classAttributeChanged);
+    connect(ui->upAttribute, &QPushButton::clicked, this, &NewClass::upAttributePressed);
+    connect(ui->downAttribute, &QPushButton::clicked, this, &NewClass::downAttributePressed);
+    connect(ui->editAttribute, &QPushButton::clicked, this, &NewClass::editAttributePressed);
+    connect(ui->deleteAttribute, &QPushButton::clicked, this, &NewClass::deleteAttributePressed);
 
     ui->className->selectAll();
 }
@@ -191,7 +205,7 @@ void NewClass::deleteParentPressed()
     ui->classParents->setCurrentRow(-1);
 }
 
-void NewClass::classParentChanged()
+void NewClass::classParentsChanged()
 {
     if (ui->classParents->currentRow() != -1)
     {
@@ -242,6 +256,85 @@ void NewClass::downParentPressed()
         for (auto it2 = generatedClass.parents.begin();it2 != generatedClass.parents.end();++it2)
             ui->classParents->addItem(&*it2);
         ui->classParents->setCurrentItem(&*it);
+    }
+}
+
+void NewClass::addAttributePressed()
+{
+    NewAttribute dialog(this);
+    if (dialog.exec())
+        ui->classAttributes->addItem(&*generatedClass.attributes.push_back(dialog.getResult()));
+}
+
+void NewClass::editAttributePressed()
+{
+    auto currentAttribute = dynamic_cast<Attribute*>(ui->classAttributes->currentItem());
+    NewAttribute dialog(this, currentAttribute);
+    if (dialog.exec())
+    {
+        *currentAttribute = dialog.getResult();
+    }
+}
+
+void NewClass::deleteAttributePressed()
+{
+    generatedClass.attributes.remove(
+                generatedClass.attributes.find(
+                    dynamic_cast<Attribute*>(ui->classAttributes->takeItem(ui->classAttributes->currentRow()))));
+    ui->classAttributes->setCurrentRow(-1);
+}
+
+void NewClass::classAttributeChanged()
+{
+    if (ui->classAttributes->currentRow() != -1)
+    {
+        ui->editAttribute->setEnabled(true);
+        ui->deleteAttribute->setEnabled(true);
+        ui->upAttribute->setEnabled(true);
+        ui->downAttribute->setEnabled(true);
+    }
+    else
+    {
+        ui->editAttribute->setEnabled(false);
+        ui->deleteAttribute->setEnabled(false);
+        ui->upAttribute->setEnabled(false);
+        ui->downAttribute->setEnabled(false);
+    }
+}
+
+void NewClass::upAttributePressed()
+{
+    if (ui->classAttributes->currentRow() > 0)
+    {
+        auto it = generatedClass.attributes.find(dynamic_cast<Attribute*>(ui->classAttributes->currentItem()));
+        Attribute moved = *it;
+        generatedClass.attributes.remove(it);
+        --it;
+        it = generatedClass.attributes.insert(it, moved);
+        while (ui->classAttributes->count())
+            ui->classAttributes->takeItem(0);
+        for (auto it2 = generatedClass.attributes.begin();it2 != generatedClass.attributes.end();++it2)
+            ui->classAttributes->addItem(&*it2);
+        ui->classAttributes->setCurrentItem(&*it);
+    }
+}
+
+void NewClass::downAttributePressed()
+{
+    if (ui->classAttributes->currentRow() < ui->classAttributes->count()-1)
+    {
+        auto it = generatedClass.attributes.find(dynamic_cast<Attribute*>(ui->classAttributes->currentItem()));
+        ++it;
+        Attribute moved = *it;
+        generatedClass.attributes.remove(it);
+        --it;
+        it = generatedClass.attributes.insert(it, moved);
+        ++it;
+        while (ui->classAttributes->count())
+            ui->classAttributes->takeItem(0);
+        for (auto it2 = generatedClass.attributes.begin();it2 != generatedClass.attributes.end();++it2)
+            ui->classAttributes->addItem(&*it2);
+        ui->classAttributes->setCurrentItem(&*it);
     }
 }
 

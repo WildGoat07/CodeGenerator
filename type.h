@@ -9,8 +9,7 @@
 struct Type : public QListWidgetItem
 {
 public:
-    Type();
-    Type(bool Void);
+    Type(char const* n = nullptr);
     QString name;
     cmpt_info::List<Type> templateValues;
     bool constant;

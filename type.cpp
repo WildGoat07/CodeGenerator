@@ -1,21 +1,13 @@
 #include "type.h"
 
-Type::Type():
+Type::Type(char const* n):
     QListWidgetItem(),
-    name(),
+    name(n ? n : ""),
     templateValues(),
     constant(false),
-    mode(COPY)
+    mode(COPY),
+    array(false)
 {
-
-}
-Type::Type(bool Void):
-    name(Void ? "void" : ""),
-    templateValues(),
-    constant(false),
-    mode(COPY)
-{
-
 }
 QVariant Type::data(int role) const
 {
