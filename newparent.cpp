@@ -1,5 +1,6 @@
 #include "newparent.h"
 #include "ui_newparent.h"
+#include "newtype.h"
 
 NewParent::NewParent(QWidget *parent, Parent const* ref) :
     QDialog(parent),
@@ -83,19 +84,19 @@ void NewParent::rangeChanged()
 
 void NewParent::addTemplatePressed()
 {
-    //NewTemplateType dialog(this);
-    //if (dialog.exec())
-    //    ui->classTemplates->addItem(&*generatedClass.templateTypes.push_back(dialog.getResult()));
+    NewType dialog(this);
+    if (dialog.exec())
+        ui->parentTemplates->addItem(&*generatedParent.templates.push_back(dialog.getResult()));
 }
 
 void NewParent::editTemplatePressed()
 {
-    //auto currentTemplate = dynamic_cast<TemplateName*>(ui->classTemplates->currentItem());
-    //NewTemplateType dialog(this, currentTemplate);
-    //if (dialog.exec())
-    //{
-    //    *currentTemplate = dialog.getResult();
-    //}
+    auto currentTemplate = dynamic_cast<Type*>(ui->parentTemplates->currentItem());
+    NewType dialog(this, currentTemplate);
+    if (dialog.exec())
+    {
+        *currentTemplate = dialog.getResult();
+    }
 }
 
 void NewParent::deleteTemplatePressed()

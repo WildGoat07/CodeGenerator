@@ -163,7 +163,7 @@ void writeCppClass(const Class& c, ostream &stream)
                 first = false;
             else
                 stream << ", ";
-            stream << getRange(parentIt->range) << ' ' << parentIt->name.toStdString();
+            stream << getRange(parentIt->range) << " virtual " << parentIt->name.toStdString();
             if (!parentIt->templates.empty())
             {
                 stream << "<";

@@ -70,6 +70,9 @@ set(PROJECT_SOURCES
         parent.h
         cpp.png
         java.png
+        newtype.cpp
+        newtype.h
+        newtype.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
