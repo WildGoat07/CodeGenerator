@@ -38,6 +38,7 @@ set(PROJECT_SOURCES
         variable.h
         variableMode.h
         range.h
+        range.cpp
         List.hpp
         method.cpp
         method.h
@@ -59,6 +60,8 @@ set(PROJECT_SOURCES
         newtemplatename.ui
         utilities.cpp
         utilities.h
+        parent.cpp
+        parent.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
