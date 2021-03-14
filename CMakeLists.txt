@@ -27,6 +27,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
+configure_file(cpp.png cpp.png COPYONLY)
+configure_file(java.png java.png COPYONLY)
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -60,8 +63,13 @@ set(PROJECT_SOURCES
         newtemplatename.ui
         utilities.cpp
         utilities.h
+        newparent.cpp
+        newparent.h
+        newparent.ui
         parent.cpp
         parent.h
+        cpp.png
+        java.png
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

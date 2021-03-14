@@ -14,20 +14,6 @@ Generator::Generator():
 
 }
 
-string getRange(Range r)
-{
-    switch (r) {
-    case PUBLIC:
-        return "public";
-    case PROTECTED:
-        return "protected";
-    case PRIVATE:
-        return "private";
-    default:
-        return "";
-    }
-}
-
 void indent(int count, ostream &stream)
 {
     stream << string(count << 2, ' ');
@@ -177,17 +163,12 @@ void writeCppClass(const Class& c, ostream &stream)
                 first = false;
             else
                 stream << ", ";
-            QString parent;
-            Range range;
-            bool interface;
-            List<Type> templateTypes;
-            tie(range, parent, interface, templateTypes) = *parentIt;
-            stream << getRange(range) << ' ' << parent.toStdString();
-            if (!templateTypes.empty())
+            stream << getRange(parentIt->range) << ' ' << parentIt->name.toStdString();
+            if (!parentIt->templates.empty())
             {
                 stream << "<";
                 bool first = true;
-                for (auto templ = templateTypes.begin();templ != templateTypes.end();++templ)
+                for (auto templ = parentIt->templates.begin();templ != parentIt->templates.end();++templ)
                 {
                     if (first)
                         first = false;
@@ -435,15 +416,14 @@ void writeJavaClass(const Class& c, ostream &stream)
     if (!c.interface)
         for (auto parentIt = c.parents.begin();parentIt != c.parents.end();++parentIt)
         {
-            if (!get<2>(*parentIt))
+            if (!parentIt->interface)
             {
-                stream << " extends " << get<1>(*parentIt).toStdString();
-                auto templateTypes = get<3>(*parentIt);
-                if (!templateTypes.empty())
+                stream << " extends " << parentIt->name.toStdString();
+                if (!parentIt->templates.empty())
                 {
                     stream << "<";
                     bool first = true;
-                    for (auto templ = templateTypes.begin();templ != templateTypes.end();++templ)
+                    for (auto templ = parentIt->templates.begin();templ != parentIt->templates.end();++templ)
                     {
                         if (first)
                             first = false;
@@ -458,8 +438,8 @@ void writeJavaClass(const Class& c, ostream &stream)
         }
     List<tuple<string, List<Type> > > interfaces;
     for (auto parentIt = c.parents.begin();parentIt != c.parents.end();++parentIt)
-        if (get<2>(*parentIt))
-            interfaces.push_back(make_tuple(get<1>(*parentIt).toStdString(), get<3>(*parentIt)));
+        if (parentIt->interface)
+            interfaces.push_back(make_tuple(parentIt->name.toStdString(), parentIt->templates));
     if (!interfaces.empty())
     {
         stream << (c.interface ? " extends " : " implements ");

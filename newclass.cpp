@@ -1,6 +1,7 @@
 #include "newclass.h"
 #include "ui_newclass.h"
 #include "newtemplatename.h"
+#include "newparent.h"
 #include "utilities.h"
 
 NewClass::NewClass(QWidget *parent, Class const* ref) :
@@ -28,6 +29,9 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     for (auto it = generatedClass.templateTypes.begin();it != generatedClass.templateTypes.end();++it)
         ui->classTemplates->addItem(&*it);
 
+    for (auto it = generatedClass.parents.begin();it != generatedClass.parents.end();++it)
+        ui->classParents->addItem(&*it);
+
     connect(ui->finalClass, &QCheckBox::clicked, this, &NewClass::finalChanged);
     connect(ui->classType, &QComboBox::currentIndexChanged, this, &NewClass::typeChanged);
     connect(ui->className, &QLineEdit::textChanged, this, &NewClass::nameChanged);
@@ -39,6 +43,12 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     connect(ui->downTemplate, &QPushButton::clicked, this, &NewClass::downTemplatePressed);
     connect(ui->editTemplate, &QPushButton::clicked, this, &NewClass::editTemplatePressed);
     connect(ui->deleteTemplate, &QPushButton::clicked, this, &NewClass::deleteTemplatePressed);
+    connect(ui->addParent, &QPushButton::clicked, this, &NewClass::addParentPressed);
+    connect(ui->classParents, &QListWidget::itemSelectionChanged, this, &NewClass::classParentChanged);
+    connect(ui->upParent, &QPushButton::clicked, this, &NewClass::upParentPressed);
+    connect(ui->downParent, &QPushButton::clicked, this, &NewClass::downParentPressed);
+    connect(ui->editParent, &QPushButton::clicked, this, &NewClass::editParentPressed);
+    connect(ui->deleteParent, &QPushButton::clicked, this, &NewClass::deleteParentPressed);
 
     ui->className->selectAll();
 }
@@ -50,7 +60,7 @@ NewClass::~NewClass()
 
 void NewClass::finalChanged()
 {
-    generatedClass.finalClass = ui->finalClass->checkState() == Qt::CheckState::Checked;
+    generatedClass.finalClass = ui->finalClass->isChecked();
 }
 
 void NewClass::nameChanged()
@@ -156,7 +166,84 @@ void NewClass::downTemplatePressed()
     }
 }
 
-#include <iostream>
+void NewClass::addParentPressed()
+{
+    NewParent dialog(this);
+    if (dialog.exec())
+        ui->classParents->addItem(&*generatedClass.parents.push_back(dialog.getResult()));
+}
+
+void NewClass::editParentPressed()
+{
+    auto currentParent = dynamic_cast<Parent*>(ui->classParents->currentItem());
+    NewParent dialog(this, currentParent);
+    if (dialog.exec())
+    {
+        *currentParent = dialog.getResult();
+    }
+}
+
+void NewClass::deleteParentPressed()
+{
+    generatedClass.parents.remove(
+                generatedClass.parents.find(
+                    dynamic_cast<Parent*>(ui->classParents->takeItem(ui->classParents->currentRow()))));
+    ui->classParents->setCurrentRow(-1);
+}
+
+void NewClass::classParentChanged()
+{
+    if (ui->classParents->currentRow() != -1)
+    {
+        ui->editParent->setEnabled(true);
+        ui->deleteParent->setEnabled(true);
+        ui->upParent->setEnabled(true);
+        ui->downParent->setEnabled(true);
+    }
+    else
+    {
+        ui->editParent->setEnabled(false);
+        ui->deleteParent->setEnabled(false);
+        ui->upParent->setEnabled(false);
+        ui->downParent->setEnabled(false);
+    }
+}
+
+void NewClass::upParentPressed()
+{
+    if (ui->classParents->currentRow() > 0)
+    {
+        auto it = generatedClass.parents.find(dynamic_cast<Parent*>(ui->classParents->currentItem()));
+        Parent moved = *it;
+        generatedClass.parents.remove(it);
+        --it;
+        it = generatedClass.parents.insert(it, moved);
+        while (ui->classParents->count())
+            ui->classParents->takeItem(0);
+        for (auto it2 = generatedClass.parents.begin();it2 != generatedClass.parents.end();++it2)
+            ui->classParents->addItem(&*it2);
+        ui->classParents->setCurrentItem(&*it);
+    }
+}
+
+void NewClass::downParentPressed()
+{
+    if (ui->classParents->currentRow() < ui->classParents->count()-1)
+    {
+        auto it = generatedClass.parents.find(dynamic_cast<Parent*>(ui->classParents->currentItem()));
+        ++it;
+        Parent moved = *it;
+        generatedClass.parents.remove(it);
+        --it;
+        it = generatedClass.parents.insert(it, moved);
+        ++it;
+        while (ui->classParents->count())
+            ui->classParents->takeItem(0);
+        for (auto it2 = generatedClass.parents.begin();it2 != generatedClass.parents.end();++it2)
+            ui->classParents->addItem(&*it2);
+        ui->classParents->setCurrentItem(&*it);
+    }
+}
 
 Class const &NewClass::getResult()
 {
