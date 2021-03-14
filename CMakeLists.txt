@@ -76,6 +76,12 @@ set(PROJECT_SOURCES
         newattribute.cpp
         newattribute.h
         newattribute.ui
+        newmethod.cpp
+        newmethod.h
+        newmethod.ui
+        newparameter.cpp
+        newparameter.h
+        newparameter.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -15,7 +15,7 @@ NewAttribute::NewAttribute(QWidget *parent, Attribute const *ref) :
     if (ref != nullptr)
     {
         generatedAttribute = *ref;
-        setWindowTitle("Éditer attribut");
+        setWindowTitle("Éditer un attribut");
     }
 
     ui->attributeName->setText(generatedAttribute.variable.name);
@@ -46,6 +46,7 @@ NewAttribute::NewAttribute(QWidget *parent, Attribute const *ref) :
     connect(ui->attributeTransient, &QCheckBox::stateChanged, this, &NewAttribute::attributeTransientChanged);
     connect(ui->editType, &QPushButton::clicked, this, &NewAttribute::editTypePressed);
 
+    ui->attributeName->setFocus(Qt::PopupFocusReason);
     ui->attributeName->selectAll();
 }
 

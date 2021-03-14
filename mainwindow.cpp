@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->newClass, &QPushButton::clicked, this, &MainWindow::newClassPressed);
     connect(ui->classesView, &QListWidget::itemSelectionChanged, this, &MainWindow::classesViewSelectionChanged);
     connect(ui->deleteClass, &QPushButton::clicked, this, &MainWindow::deleteClassPressed);
+    connect(ui->classesView, &QListWidget::doubleClicked, this, &MainWindow::editClassPressed);
     connect(ui->editClass, &QPushButton::released, this, &MainWindow::editClassPressed);
 
 }

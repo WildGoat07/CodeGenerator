@@ -34,6 +34,7 @@ NewType::NewType(QWidget *parent, Type const *ref) :
     for (auto it = generatedType.templateValues.begin();it != generatedType.templateValues.end();++it)
         ui->typeTemplates->addItem(&*it);
 
+    ui->typeName->setFocus(Qt::PopupFocusReason);
     ui->typeName->selectAll();
 
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
@@ -47,6 +48,7 @@ NewType::NewType(QWidget *parent, Type const *ref) :
     connect(ui->upTemplate, &QPushButton::clicked, this, &NewType::upTemplatePressed);
     connect(ui->downTemplate, &QPushButton::clicked, this, &NewType::downTemplatePressed);
     connect(ui->editTemplate, &QPushButton::clicked, this, &NewType::editTemplatePressed);
+    connect(ui->typeTemplates, &QListWidget::doubleClicked, this, &NewType::editTemplatePressed);
     connect(ui->deleteTemplate, &QPushButton::clicked, this, &NewType::deleteTemplatePressed);
 
 }

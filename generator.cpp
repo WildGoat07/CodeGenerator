@@ -111,7 +111,7 @@ void writeCppMethod(const Method& method, const string& className, ostream& stre
     {
         indent(1, stream);
         if (method.specialMethod == Method::DESTRUCTOR)
-            stream << '~';
+            stream << "virtual ~";
         stream << className << '(';
     }
     bool first = true;

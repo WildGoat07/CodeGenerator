@@ -13,7 +13,7 @@ NewParent::NewParent(QWidget *parent, Parent const* ref) :
     if (ref != nullptr)
     {
         generatedParent = *ref;
-        setWindowTitle("Éditer parent");
+        setWindowTitle("Éditer un parent");
     }
 
     ui->parentName->setText(QString(generatedParent.name));
@@ -35,6 +35,7 @@ NewParent::NewParent(QWidget *parent, Parent const* ref) :
     for (auto it = generatedParent.templates.begin();it != generatedParent.templates.end();++it)
         ui->parentTemplates->addItem(&*it);
 
+    ui->parentName->setFocus(Qt::PopupFocusReason);
     ui->parentName->selectAll();
 
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
@@ -42,11 +43,13 @@ NewParent::NewParent(QWidget *parent, Parent const* ref) :
     connect(ui->parentName, &QLineEdit::textChanged, this, &NewParent::nameChanged);
     connect(ui->parentInterface, &QCheckBox::stateChanged, this, &NewParent::interfaceChanged);
     connect(ui->parentRange, &QComboBox::currentIndexChanged, this, &NewParent::rangeChanged);
+
     connect(ui->addTemplate, &QPushButton::clicked, this, &NewParent::addTemplatePressed);
     connect(ui->parentTemplates, &QListWidget::itemSelectionChanged, this, &NewParent::parentTemplatesChanged);
     connect(ui->upTemplate, &QPushButton::clicked, this, &NewParent::upTemplatePressed);
     connect(ui->downTemplate, &QPushButton::clicked, this, &NewParent::downTemplatePressed);
     connect(ui->editTemplate, &QPushButton::clicked, this, &NewParent::editTemplatePressed);
+    connect(ui->parentTemplates, &QListWidget::doubleClicked, this, &NewParent::editTemplatePressed);
     connect(ui->deleteTemplate, &QPushButton::clicked, this, &NewParent::deleteTemplatePressed);
 
 }

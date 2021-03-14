@@ -17,6 +17,7 @@ NewTemplateType::NewTemplateType(QWidget *parent, TemplateName const* ref) :
     }
 
     ui->templateName->setText(generatedTemplate.name);
+    ui->templateName->setFocus(Qt::PopupFocusReason);
     ui->templateName->selectAll();
 
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);

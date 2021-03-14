@@ -38,6 +38,12 @@ private slots:
     void downAttributePressed();
     void editAttributePressed();
     void deleteAttributePressed();
+    void addMethodPressed();
+    void classMethodsChanged();
+    void upMethodPressed();
+    void downMethodPressed();
+    void editMethodPressed();
+    void deleteMethodPressed();
 
 private:
     Ui::NewClass *ui;
