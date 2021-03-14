@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "newclass.h"
+#include <sstream>
+#include "textdisplayer.h"
+#include "generator.h"
 
 
 using namespace std;
@@ -19,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->deleteClass, &QPushButton::clicked, this, &MainWindow::deleteClassPressed);
     connect(ui->classesView, &QListWidget::doubleClicked, this, &MainWindow::editClassPressed);
     connect(ui->editClass, &QPushButton::released, this, &MainWindow::editClassPressed);
+    connect(ui->generateCpp, &QPushButton::released, this, &MainWindow::generateCppPressed);
+    connect(ui->generateJava, &QPushButton::released, this, &MainWindow::generateJavaPressed);
 
 }
 
@@ -31,8 +36,24 @@ void MainWindow::newClassPressed()
     }
 }
 
-#include <iostream>
-
+void MainWindow::generateCppPressed()
+{
+    std::stringstream ss;
+    Generator generator;
+    for (auto i = 0;i<ui->classesView->count();++i)
+        generator.classes.push_back(*dynamic_cast<Class*>(ui->classesView->item(i)));
+    generator.GenerateCpp(ss);
+    TextDisplayer(QString(ss.str().c_str()), this).exec();
+}
+void MainWindow::generateJavaPressed()
+{
+    std::stringstream ss;
+    Generator generator;
+    for (auto i = 0;i<ui->classesView->count();++i)
+        generator.classes.push_back(*dynamic_cast<Class*>(ui->classesView->item(i)));
+    generator.GenerateJava(ss);
+    TextDisplayer(QString(ss.str().c_str()), this).exec();
+}
 
 void MainWindow::editClassPressed()
 {

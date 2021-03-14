@@ -21,18 +21,19 @@ void indent(int count, ostream &stream)
 
 void writeCppType(const Type& type, ostream& stream, bool addSpace)
 {
+    if (type.array)
+    {
+        stream << "vector<";
+        addSpace = false;
+    }
     if (type.constant)
         stream << "const ";
-    if (type.array)
-        stream << "vector<";
     if (type.name == "boolean")
         stream << "bool";
     else if (type.name == "String" || type.name == "string")
         stream << "std::string";
     else
         stream << type.name.toStdString();
-    if (type.array)
-        stream << '>';
     if (!type.templateValues.empty())
     {
         stream << "<";
@@ -60,6 +61,8 @@ void writeCppType(const Type& type, ostream& stream, bool addSpace)
     default:
         break;
     }
+    if (type.array)
+        stream << "> ";
 }
 
 void writeCppAttribute(const Attribute& attribute, ostream &stream)
@@ -68,7 +71,7 @@ void writeCppAttribute(const Attribute& attribute, ostream &stream)
     if (attribute.staticAttribute)
         stream << "static ";
     writeCppType(attribute.variable.varType, stream, true);
-    stream << ' ' << attribute.variable.name.toStdString() << ';' << endl;
+    stream << attribute.variable.name.toStdString() << ';' << endl;
 }
 
 void writeCppMethod(const Method& method, const string& className, ostream& stream)
@@ -281,8 +284,6 @@ void writeJavaType(const Type& type, ostream &stream)
         stream << "String";
     else
         stream << type.name.toStdString();
-    if (type.array)
-        stream << '>';
     if (!type.templateValues.empty())
     {
         stream << "<";
@@ -297,6 +298,8 @@ void writeJavaType(const Type& type, ostream &stream)
         }
         stream << '>';
     }
+    if (type.array)
+        stream << '>';
 }
 
 void writeJavaAttribute(const Attribute& attribute, ostream &stream)
@@ -405,6 +408,8 @@ void writeJavaClass(const Class& c, ostream &stream)
 {
     if (c.finalClass)
         stream << "final ";
+    if (c.abstract)
+        stream << "abstract ";
     stream << (c.interface ? "interface " : "class ") << c.name.toStdString();
     if (!c.templateTypes.empty())
     {

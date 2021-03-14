@@ -22,11 +22,20 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     }
     ui->className->setText(QString(generatedClass.name));
     if (generatedClass.abstract)
+    {
         ui->classType->setCurrentIndex(2);
+        ui->finalClass->setEnabled(false);
+    }
     else if (generatedClass.interface)
+    {
         ui->classType->setCurrentIndex(1);
+        ui->finalClass->setEnabled(false);
+    }
     else
+    {
         ui->classType->setCurrentIndex(0);
+        ui->finalClass->setEnabled(true);
+    }
     ui->finalClass->setChecked(generatedClass.finalClass);
 
     for (auto it = generatedClass.templateTypes.begin();it != generatedClass.templateTypes.end();++it)
@@ -105,14 +114,19 @@ void NewClass::typeChanged()
     case 0:
         generatedClass.abstract = false;
         generatedClass.interface = false;
+        ui->finalClass->setEnabled(true);
         break;
     case 1:
         generatedClass.abstract = false;
         generatedClass.interface = true;
+        generatedClass.finalClass = false;
+        ui->finalClass->setEnabled(false);
         break;
     case 2:
         generatedClass.abstract = true;
         generatedClass.interface = false;
+        generatedClass.finalClass = false;
+        ui->finalClass->setEnabled(false);
         break;
     }
 }

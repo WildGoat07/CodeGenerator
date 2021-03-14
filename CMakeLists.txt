@@ -82,6 +82,9 @@ set(PROJECT_SOURCES
         newparameter.cpp
         newparameter.h
         newparameter.ui
+        textdisplayer.cpp
+        textdisplayer.h
+        textdisplayer.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

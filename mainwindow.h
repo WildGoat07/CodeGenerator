@@ -28,5 +28,7 @@ private slots:
     void editClassPressed();
     void deleteClassPressed();
     void classesViewSelectionChanged();
+    void generateCppPressed();
+    void generateJavaPressed();
 };
 #endif // MAINWINDOW_H
