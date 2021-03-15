@@ -29,6 +29,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
 configure_file(cpp.png cpp.png COPYONLY)
 configure_file(java.png java.png COPYONLY)
+configure_file(pot.png pot.png COPYONLY)
 
 set(PROJECT_SOURCES
         cpp.png
