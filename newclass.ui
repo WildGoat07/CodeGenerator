@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Nouvelle classe</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>pot.png</normaloff>pot.png</iconset>
+  </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>

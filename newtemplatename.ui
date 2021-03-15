@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Nouveau nom générique</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>pot.png</normaloff>pot.png</iconset>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>

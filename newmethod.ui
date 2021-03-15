@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Nouvelle méthode</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>pot.png</normaloff>pot.png</iconset>
+  </property>
   <widget class="QComboBox" name="methodSpecial">
    <property name="geometry">
     <rect>

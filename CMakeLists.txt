@@ -31,6 +31,10 @@ configure_file(cpp.png cpp.png COPYONLY)
 configure_file(java.png java.png COPYONLY)
 
 set(PROJECT_SOURCES
+        cpp.png
+        java.png
+        pot.png
+
         main.cpp
         mainwindow.cpp
         mainwindow.h
@@ -68,8 +72,6 @@ set(PROJECT_SOURCES
         newparent.ui
         parent.cpp
         parent.h
-        cpp.png
-        java.png
         newtype.cpp
         newtype.h
         newtype.ui
