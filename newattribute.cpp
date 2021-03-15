@@ -37,6 +37,7 @@ NewAttribute::NewAttribute(QWidget *parent, Attribute const *ref) :
     }
     ui->attributeStatic->setChecked(generatedAttribute.staticAttribute);
     ui->attributeTransient->setChecked(generatedAttribute.transientAttribute);
+    ui->attributeTransient->setEnabled(!generatedAttribute.staticAttribute);
 
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
