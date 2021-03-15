@@ -89,6 +89,11 @@ void NewAttribute::attributeRangeChanged()
 void NewAttribute::attributeStaticChanged()
 {
     generatedAttribute.staticAttribute = ui->attributeStatic->isChecked();
+    ui->attributeTransient->setEnabled(!generatedAttribute.staticAttribute);
+    if (generatedAttribute.staticAttribute)
+        generatedAttribute.transientAttribute = false;
+    else
+        generatedAttribute.transientAttribute = ui->attributeTransient->isChecked();
 }
 void NewAttribute::attributeTransientChanged()
 {
