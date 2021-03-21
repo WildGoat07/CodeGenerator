@@ -10,16 +10,21 @@ NewMethod::NewMethod(QWidget *parent, Method const *ref) :
     QDialog(parent),
     ui(new Ui::NewMethod)
 {
+    /*****************************/
+    // non resizable window
     ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
     setFixedSize(size());
 
     if (ref != nullptr)
     {
+        // if we are editing an existing method
         generatedMethod = *ref;
         setWindowTitle("Éditer une méthode");
     }
 
+    /*****************************/
+    // default values
     ui->cppModifier->setVisible(false);
 
     switch (generatedMethod.specialMethod) {
@@ -123,6 +128,10 @@ NewMethod::NewMethod(QWidget *parent, Method const *ref) :
     for (auto it = generatedMethod.parameters.begin();it != generatedMethod.parameters.end();++it)
         ui->methodParameters->addItem(&*it);
 
+    /*****************************/
+    // events
+
+    // base buttons
     connect(ui->validate, &QPushButton::clicked, this, &NewMethod::validatePressed);
     connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
     connect(ui->methodSpecial, &QComboBox::currentIndexChanged, this, &NewMethod::methodSpecialChanged);
@@ -133,6 +142,7 @@ NewMethod::NewMethod(QWidget *parent, Method const *ref) :
     connect(ui->methodConst, &QCheckBox::stateChanged, this, &NewMethod::methodConstChanged);
     connect(ui->methodFinal, &QCheckBox::stateChanged, this, &NewMethod::methodFinalChanged);
 
+    // templates
     connect(ui->addTemplate, &QPushButton::clicked, this, &NewMethod::addTemplatePressed);
     connect(ui->methodTemplates, &QListWidget::itemSelectionChanged, this, &NewMethod::methodTemplatesChanged);
     connect(ui->upTemplate, &QPushButton::clicked, this, &NewMethod::upTemplatePressed);
@@ -141,6 +151,7 @@ NewMethod::NewMethod(QWidget *parent, Method const *ref) :
     connect(ui->methodTemplates, &QListWidget::doubleClicked, this, &NewMethod::editTemplatePressed);
     connect(ui->deleteTemplate, &QPushButton::clicked, this, &NewMethod::deleteTemplatePressed);
 
+    // parameters
     connect(ui->addParameter, &QPushButton::clicked, this, &NewMethod::addParameterPressed);
     connect(ui->methodParameters, &QListWidget::itemSelectionChanged, this, &NewMethod::methodParametersChanged);
     connect(ui->upParameter, &QPushButton::clicked, this, &NewMethod::upParameterPressed);
@@ -149,6 +160,8 @@ NewMethod::NewMethod(QWidget *parent, Method const *ref) :
     connect(ui->methodParameters, &QListWidget::doubleClicked, this, &NewMethod::editParameterPressed);
     connect(ui->deleteParameter, &QPushButton::clicked, this, &NewMethod::deleteParameterPressed);
 
+    /*****************************/
+    // base focus on method name
     ui->methodName->setFocus(Qt::PopupFocusReason);
     ui->methodName->selectAll();
 }

@@ -6,16 +6,21 @@ NewParent::NewParent(QWidget *parent, Parent const* ref) :
     QDialog(parent),
     ui(new Ui::NewParent)
 {
+    /*****************************/
+    // non resizable window
     ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
     setFixedSize(size());
 
     if (ref != nullptr)
     {
+        // if we are editing a parent
         generatedParent = *ref;
         setWindowTitle("Éditer un parent");
     }
 
+    /*****************************/
+    // default values
     ui->parentName->setText(QString(generatedParent.name));
     ui->parentInterface->setChecked(generatedParent.interface);
 
@@ -35,15 +40,22 @@ NewParent::NewParent(QWidget *parent, Parent const* ref) :
     for (auto it = generatedParent.templates.begin();it != generatedParent.templates.end();++it)
         ui->parentTemplates->addItem(&*it);
 
+    /*****************************/
+    // parent name focused by default
     ui->parentName->setFocus(Qt::PopupFocusReason);
     ui->parentName->selectAll();
 
+    /*****************************/
+    // events
+
+    // base buttons
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
     connect(ui->parentName, &QLineEdit::textChanged, this, &NewParent::nameChanged);
     connect(ui->parentInterface, &QCheckBox::stateChanged, this, &NewParent::interfaceChanged);
     connect(ui->parentRange, &QComboBox::currentIndexChanged, this, &NewParent::rangeChanged);
 
+    // templates
     connect(ui->addTemplate, &QPushButton::clicked, this, &NewParent::addTemplatePressed);
     connect(ui->parentTemplates, &QListWidget::itemSelectionChanged, this, &NewParent::parentTemplatesChanged);
     connect(ui->upTemplate, &QPushButton::clicked, this, &NewParent::upTemplatePressed);

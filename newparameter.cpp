@@ -7,12 +7,15 @@ NewParameter::NewParameter(QWidget *parent, Variable const *ref) :
     QDialog(parent),
     ui(new Ui::NewParameter)
 {
+    /*****************************/
+    // non resizable window
     ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
     setFixedSize(size());
 
     if (ref != nullptr)
     {
+        // if we are editing a parameter
         generatedVariable = *ref;
         setWindowTitle("Éditer un paramètre");
     }
@@ -25,12 +28,15 @@ NewParameter::NewParameter(QWidget *parent, Variable const *ref) :
     }
 
 
+    /*****************************/
+    // events
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
     connect(ui->parameterName, &QLineEdit::textChanged, this, &NewParameter::parameterNameChanged);
     connect(ui->editType, &QPushButton::clicked, this, &NewParameter::editTypePressed);
 
-
+    /*****************************/
+    // parameter name focused by default
     ui->parameterName->setFocus(Qt::PopupFocusReason);
     ui->parameterName->selectAll();
 }

@@ -13,10 +13,13 @@ MainWindow::MainWindow(QWidget *parent)
       ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    /*****************************/
+    // non resizable window
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
     setFixedSize(size());
 
-
+    /*****************************/
+    // events
     connect(ui->newClass, &QPushButton::clicked, this, &MainWindow::newClassPressed);
     connect(ui->classesView, &QListWidget::itemSelectionChanged, this, &MainWindow::classesViewSelectionChanged);
     connect(ui->deleteClass, &QPushButton::clicked, this, &MainWindow::deleteClassPressed);

@@ -5,16 +5,21 @@ NewType::NewType(QWidget *parent, Type const *ref) :
     QDialog(parent),
     ui(new Ui::NewType)
 {
+    /*****************************/
+    // non resizable window
     ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
     setFixedSize(size());
 
     if (ref != nullptr)
     {
+        // if we are editing a type
         generatedType = *ref;
         setWindowTitle("Éditer type");
     }
 
+    /*****************************/
+    // default values
     ui->typeName->setText(generatedType.name);
     switch(generatedType.mode)
     {
@@ -34,15 +39,23 @@ NewType::NewType(QWidget *parent, Type const *ref) :
     for (auto it = generatedType.templateValues.begin();it != generatedType.templateValues.end();++it)
         ui->typeTemplates->addItem(&*it);
 
+    /*****************************/
+    // type name focused by default
     ui->typeName->setFocus(Qt::PopupFocusReason);
     ui->typeName->selectAll();
 
+    /*****************************/
+    // events
+
+    // base buttons
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
     connect(ui->typeName, &QLineEdit::textChanged, this, &NewType::typeNameChanged);
     connect(ui->typeMode, &QComboBox::currentIndexChanged, this, &NewType::typeModeChanged);
     connect(ui->typeConst, &QCheckBox::stateChanged, this, &NewType::typeConstChanged);
     connect(ui->typeList, &QCheckBox::stateChanged, this, &NewType::typeListChanged);
+
+    // templates
     connect(ui->addTemplate, &QPushButton::clicked, this, &NewType::addTemplatePressed);
     connect(ui->typeTemplates, &QListWidget::itemSelectionChanged, this, &NewType::typeTemplatesChanged);
     connect(ui->upTemplate, &QPushButton::clicked, this, &NewType::upTemplatePressed);

@@ -8,16 +8,21 @@ NewAttribute::NewAttribute(QWidget *parent, Attribute const *ref) :
     QDialog(parent),
     ui(new Ui::NewAttribute)
 {
+    /*****************************/
+    // non-resizable window
     ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
     setFixedSize(size());
 
     if (ref != nullptr)
     {
+        // if we are editing an existing attribute
         generatedAttribute = *ref;
         setWindowTitle("Éditer un attribut");
     }
 
+    /*****************************/
+    // default values
     ui->attributeName->setText(generatedAttribute.variable.name);
     switch (generatedAttribute.range) {
     case Range::PUBLIC:
@@ -39,6 +44,8 @@ NewAttribute::NewAttribute(QWidget *parent, Attribute const *ref) :
     ui->attributeTransient->setChecked(generatedAttribute.transientAttribute);
     ui->attributeTransient->setEnabled(!generatedAttribute.staticAttribute);
 
+    /*****************************/
+    // events
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
     connect(ui->attributeName, &QLineEdit::textChanged, this, &NewAttribute::attributeNameChanged);
@@ -47,6 +54,8 @@ NewAttribute::NewAttribute(QWidget *parent, Attribute const *ref) :
     connect(ui->attributeTransient, &QCheckBox::stateChanged, this, &NewAttribute::attributeTransientChanged);
     connect(ui->editType, &QPushButton::clicked, this, &NewAttribute::editTypePressed);
 
+    /*****************************/
+    // default focus on text input
     ui->attributeName->setFocus(Qt::PopupFocusReason);
     ui->attributeName->selectAll();
 }

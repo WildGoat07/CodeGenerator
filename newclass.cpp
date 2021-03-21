@@ -11,15 +11,20 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     QDialog(parent),
     ui(new Ui::NewClass)
 {
+    /*****************************/
+    // non resizable window
     ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
     setFixedSize(size());
 
     if (ref != nullptr)
     {
+        // if we are editing an existing class
         generatedClass = *ref;
         setWindowTitle("Éditer une classe");
     }
+    /*****************************/
+    // default values
     ui->className->setText(QString(generatedClass.name));
     if (generatedClass.abstract)
     {
@@ -50,12 +55,17 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     for (auto it = generatedClass.methods.begin();it != generatedClass.methods.end();++it)
         ui->classMethods->addItem(&*it);
 
+    /*****************************/
+    // events
+
+    // base buttons
     connect(ui->finalClass, &QCheckBox::clicked, this, &NewClass::finalChanged);
     connect(ui->classType, &QComboBox::currentIndexChanged, this, &NewClass::typeChanged);
     connect(ui->className, &QLineEdit::textChanged, this, &NewClass::nameChanged);
     connect(ui->validate, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui->cancel, &QPushButton::clicked, this, &QDialog::reject);
 
+    // templates
     connect(ui->addTemplate, &QPushButton::clicked, this, &NewClass::addTemplatePressed);
     connect(ui->classTemplates, &QListWidget::itemSelectionChanged, this, &NewClass::classTemplatesChanged);
     connect(ui->upTemplate, &QPushButton::clicked, this, &NewClass::upTemplatePressed);
@@ -64,6 +74,7 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     connect(ui->classTemplates, &QListWidget::doubleClicked, this, &NewClass::editTemplatePressed);
     connect(ui->deleteTemplate, &QPushButton::clicked, this, &NewClass::deleteTemplatePressed);
 
+    // parents
     connect(ui->addParent, &QPushButton::clicked, this, &NewClass::addParentPressed);
     connect(ui->classParents, &QListWidget::itemSelectionChanged, this, &NewClass::classParentsChanged);
     connect(ui->upParent, &QPushButton::clicked, this, &NewClass::upParentPressed);
@@ -72,6 +83,7 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     connect(ui->classParents, &QListWidget::doubleClicked, this, &NewClass::editParentPressed);
     connect(ui->deleteParent, &QPushButton::clicked, this, &NewClass::deleteParentPressed);
 
+    // attributes
     connect(ui->addAttribute, &QPushButton::clicked, this, &NewClass::addAttributePressed);
     connect(ui->classAttributes, &QListWidget::itemSelectionChanged, this, &NewClass::classAttributeChanged);
     connect(ui->upAttribute, &QPushButton::clicked, this, &NewClass::upAttributePressed);
@@ -80,6 +92,7 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     connect(ui->classAttributes, &QListWidget::doubleClicked, this, &NewClass::editAttributePressed);
     connect(ui->deleteAttribute, &QPushButton::clicked, this, &NewClass::deleteAttributePressed);
 
+    // methods
     connect(ui->addMethod, &QPushButton::clicked, this, &NewClass::addMethodPressed);
     connect(ui->classMethods, &QListWidget::itemSelectionChanged, this, &NewClass::classMethodsChanged);
     connect(ui->upMethod, &QPushButton::clicked, this, &NewClass::upMethodPressed);
@@ -88,6 +101,8 @@ NewClass::NewClass(QWidget *parent, Class const* ref) :
     connect(ui->classMethods, &QListWidget::doubleClicked, this, &NewClass::editMethodPressed);
     connect(ui->deleteMethod, &QPushButton::clicked, this, &NewClass::deleteMethodPressed);
 
+    /*****************************/
+    // class name focused by default
     ui->className->setFocus(Qt::PopupFocusReason);
     ui->className->selectAll();
 }
@@ -111,18 +126,18 @@ void NewClass::typeChanged()
 {
     switch (ui->classType->currentIndex())
     {
-    case 0:
+    case 0: // none
         generatedClass.abstract = false;
         generatedClass.interface = false;
         ui->finalClass->setEnabled(true);
         break;
-    case 1:
+    case 1: // interface
         generatedClass.abstract = false;
         generatedClass.interface = true;
         generatedClass.finalClass = false;
         ui->finalClass->setEnabled(false);
         break;
-    case 2:
+    case 2: // abstract
         generatedClass.abstract = true;
         generatedClass.interface = false;
         generatedClass.finalClass = false;
